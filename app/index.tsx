@@ -1,9 +1,9 @@
+import { Colors, Palette } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors, Palette } from '@/constants/theme';
 
 export default function LandingScreen() {
   const colorScheme = useColorScheme();
@@ -11,7 +11,14 @@ export default function LandingScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', gap: 52 }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 52,
+        }}
+      >
         <Image
           source={require('@/assets/house-rules-logo.svg')}
           style={{ width: 280, height: 280 }}
@@ -28,7 +35,14 @@ export default function LandingScreen() {
           })}
           onPress={() => router.replace('/(tabs)')}
         >
-          <Text style={{ color: '#3D3530', fontSize: 20, fontWeight: '600', letterSpacing: 0.3 }}>
+          <Text
+            style={{
+              color: '#3D3530',
+              fontSize: 20,
+              fontWeight: '600',
+              letterSpacing: 0.3,
+            }}
+          >
             Let's Play!
           </Text>
         </Pressable>
