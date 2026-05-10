@@ -10,6 +10,7 @@ import { SettingsMenu } from '@/components/settings-menu';
 import { useStorage } from '@/hooks/use-storage';
 import { phase10Game } from '@/utils/phase10-game';
 import { players as playerStore } from '@/utils/players';
+import { RULESETS } from '@/constants/phases';
 import type { Phase10Game, GamePlayer } from '@/types/game';
 
 const gradient = {
@@ -19,8 +20,9 @@ const gradient = {
 
 export default function Phase10GameScreen() {
   const colorScheme = useColorScheme();
-  const { playerIds } = useLocalSearchParams<{ playerIds: string }>();
+  const { playerIds, rulesetId } = useLocalSearchParams<{ playerIds: string; rulesetId: string }>();
   const [game] = useStorage<Phase10Game | null>('phase10-game', null);
+  const ruleset = RULESETS.find(r => r.id === (game?.rulesetId ?? rulesetId ?? 'standard')) ?? RULESETS[0];
   const [selectedPlayer, setSelectedPlayer] = useState<GamePlayer | null>(null);
   const [phaseCompleted, setPhaseCompleted] = useState(false);
   const [roundScore, setRoundScore] = useState('');
@@ -41,7 +43,7 @@ export default function Phase10GameScreen() {
     const selected = selectedIds
       .map(id => allPlayers.find(p => p.id === id))
       .filter(Boolean) as { id: string; name: string }[];
-    phase10Game.start(selected);
+    phase10Game.start(selected, rulesetId ?? 'standard');
   }, [playerIds]);
 
   if (!game) return null;
@@ -82,7 +84,7 @@ export default function Phase10GameScreen() {
               >
                 <Text style={{ flex: 1, fontSize: 20, fontWeight: '600', color: colorScheme === 'dark' ? 'white' : '#1C1C1E' }}>{player.name}</Text>
                 <View style={{ flex: 2, alignItems: 'center' }}>
-                  <PhaseDisplay phase={player.phase} tileSize={17} colorScheme={colorScheme} />
+                  <PhaseDisplay phase={player.phase} tileSize={17} colorScheme={colorScheme} phasesRecord={ruleset.phases} />
                 </View>
                 <Text style={{ flex: 1, fontSize: 20, fontWeight: '700', color: colorScheme === 'dark' ? 'white' : '#1C1C1E', fontVariant: ['tabular-nums'], textAlign: 'right' }}>
                   {player.score}
@@ -98,7 +100,7 @@ export default function Phase10GameScreen() {
               onPress={() => {
                 if (gameEnded) {
                   const players = game.players.map(p => ({ id: p.id, name: p.name }));
-                  phase10Game.start(players);
+                  phase10Game.start(players, game.rulesetId);
                   setSubmissions(new Map());
                   setRoundScore('');
                   setPhaseCompleted(false);

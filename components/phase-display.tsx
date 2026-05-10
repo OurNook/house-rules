@@ -1,11 +1,12 @@
 import { View, Text } from 'react-native';
 import { PHASE_SEGMENTS, getSegmentTiles } from '@/constants/phases';
+import type { PhaseSegment } from '@/constants/phases';
 
 const DEFAULT_TILE_SIZE = 18;
 const TILE_RADIUS = 3;
 
-export function PhaseDisplay({ phase, tileSize = DEFAULT_TILE_SIZE, colorScheme }: { phase: number; tileSize?: number; colorScheme?: 'light' | 'dark' | null }) {
-  const segments = PHASE_SEGMENTS[phase];
+export function PhaseDisplay({ phase, tileSize = DEFAULT_TILE_SIZE, colorScheme, phasesRecord }: { phase: number; tileSize?: number; colorScheme?: 'light' | 'dark' | null; phasesRecord?: Record<number, PhaseSegment[]> }) {
+  const segments = (phasesRecord ?? PHASE_SEGMENTS)[phase];
   if (!segments) return null;
 
   return (

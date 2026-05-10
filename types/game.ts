@@ -8,4 +8,5 @@ export type GamePlayer = {
 export type Phase10Game = {
   players: GamePlayer[];
   startedAt: string;
+  rulesetId: string;
 };

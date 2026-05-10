@@ -1,5 +1,6 @@
 import { SettingsMenu } from '@/components/settings-menu';
 import { Palette } from '@/constants/theme';
+import { RULESETS } from '@/constants/phases';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useStorage } from '@/hooks/use-storage';
 import type { Player } from '@/types/player';
@@ -31,6 +32,7 @@ export default function Phase10Screen() {
   const [playerList] = useStorage<Player[]>('players', []);
   const [editMode, setEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [rulesetId, setRulesetId] = useState('standard');
 
   const togglePlayer = (id: string) => {
     setSelectedIds((prev) => {
@@ -313,10 +315,40 @@ export default function Phase10Screen() {
                   </Text>
                 </Pressable>
               ) : selectedIds.size >= 2 ? (
+                <View style={{ gap: 16 }}>
+                  {/* Ruleset selector */}
+                  <View style={{ gap: 6 }}>
+                    <Text style={{ fontSize: 13, fontWeight: '500', color: 'rgba(255,255,255,0.7)', paddingLeft: 4 }}>Phase Set</Text>
+                    <View style={{ flexDirection: 'row', gap: 8 }}>
+                      {RULESETS.map(rs => {
+                        const isActive = rulesetId === rs.id;
+                        return (
+                          <Pressable
+                            key={rs.id}
+                            onPress={() => setRulesetId(rs.id)}
+                            style={({ pressed }) => ({
+                              flex: 1,
+                              alignItems: 'center',
+                              paddingVertical: 10,
+                              borderRadius: 999,
+                              backgroundColor: colorScheme === 'dark'
+                                ? (isActive ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.1)')
+                                : (isActive ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.45)'),
+                              opacity: pressed ? 0.8 : 1,
+                            })}
+                          >
+                            <Text style={{ fontSize: 14, fontWeight: isActive ? '700' : '500', color: colorScheme === 'dark' ? 'white' : (isActive ? '#1C1C1E' : 'rgba(0,0,0,0.6)') }}>
+                              {rs.name}
+                            </Text>
+                          </Pressable>
+                        );
+                      })}
+                    </View>
+                  </View>
                 <Pressable
                   onPress={() => router.push({
                     pathname: '/(tabs)/phase-10/game',
-                    params: { playerIds: JSON.stringify([...selectedIds]) },
+                    params: { playerIds: JSON.stringify([...selectedIds]), rulesetId },
                   })}
                   style={({ pressed }) => ({
                     flexDirection: 'row',
@@ -333,6 +365,7 @@ export default function Phase10Screen() {
                   <SymbolView name="play.fill" size={20} tintColor="white" resizeMode="scaleAspectFit" />
                   <Text style={{ fontSize: 17, fontWeight: '700', color: 'white' }}>Begin Game</Text>
                 </Pressable>
+                </View>
               ) : (
                 <View style={{ gap: 12 }}>
                   <Pressable

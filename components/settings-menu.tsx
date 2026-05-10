@@ -4,12 +4,23 @@ import { SymbolView } from 'expo-symbols';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors, Palette } from '@/constants/theme';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
 export function SettingsMenu() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(false);
+  const [keepAwake, setKeepAwake] = useState(false);
+
+  const toggleKeepAwake = async (value: boolean) => {
+    setKeepAwake(value);
+    if (value) {
+      await activateKeepAwakeAsync('settings');
+    } else {
+      deactivateKeepAwake('settings');
+    }
+  };
 
   return (
     <>
@@ -46,6 +57,15 @@ export function SettingsMenu() {
               <Switch
                 value={colorScheme === 'dark'}
                 onValueChange={(v) => Appearance.setColorScheme(v ? 'dark' : 'light')}
+                trackColor={{ true: Palette.lavender }}
+              />
+            </View>
+            <View style={{ height: 1, backgroundColor: colorScheme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', marginVertical: 12 }} />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, color: colors.text }}>Keep Screen On</Text>
+              <Switch
+                value={keepAwake}
+                onValueChange={toggleKeepAwake}
                 trackColor={{ true: Palette.lavender }}
               />
             </View>

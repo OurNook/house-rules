@@ -8,10 +8,11 @@ export const phase10Game = {
     return storage.get<Phase10Game | null>(KEY, null);
   },
 
-  start(players: Pick<GamePlayer, 'id' | 'name'>[]): Phase10Game {
+  start(players: Pick<GamePlayer, 'id' | 'name'>[], rulesetId = 'standard'): Phase10Game {
     const game: Phase10Game = {
       players: players.map(p => ({ ...p, score: 0, phase: 1 })),
       startedAt: new Date().toISOString(),
+      rulesetId,
     };
     storage.set(KEY, game);
     return game;
