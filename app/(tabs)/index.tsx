@@ -59,6 +59,23 @@ export default function GamesScreen() {
             Card Game
           </Text>
         </Pressable>
+
+        <Pressable
+          style={({ pressed }) => ({
+            backgroundColor: Palette.butter,
+            borderRadius: 16,
+            borderCurve: 'continuous',
+            padding: 20,
+            opacity: pressed ? 0.85 : 1,
+            boxShadow: '0 2px 8px rgba(240, 220, 140, 0.4)',
+          })}
+          onPress={() => router.push('/(tabs)/diminishing-whist')}
+        >
+          <Text style={{ fontSize: 18, fontWeight: '600', color: '#3D3530' }}>Diminishing Whist</Text>
+          <Text style={{ fontSize: 13, color: '#3D3530', opacity: 0.65, marginTop: 4 }}>
+            Card Game
+          </Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

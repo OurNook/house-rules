@@ -357,6 +357,22 @@ export default function SkyjoScreen() {
                     <SymbolView name="plus.circle" size={22} tintColor={Palette.mint} resizeMode="scaleAspectFit" />
                     <Text style={{ fontSize: 17, fontWeight: '600', color: Palette.mint }}>Add Players</Text>
                   </Pressable>
+                  <Pressable
+                    onPress={() => router.push('/(tabs)/skyjo/statistics')}
+                    style={({ pressed }) => ({
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 10,
+                      backgroundColor: 'rgba(255,255,255,0.2)',
+                      borderRadius: 999,
+                      paddingVertical: 18,
+                      opacity: pressed ? 0.85 : 1,
+                    })}
+                  >
+                    <SymbolView name="chart.bar.fill" size={20} tintColor="white" resizeMode="scaleAspectFit" />
+                    <Text style={{ fontSize: 17, fontWeight: '600', color: 'white' }}>Statistics</Text>
+                  </Pressable>
                 </View>
               )}
             </View>
