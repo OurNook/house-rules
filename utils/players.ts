@@ -24,4 +24,11 @@ export const players = {
   remove(id: string): void {
     storage.set(KEY, players.getAll().filter((p) => p.id !== id));
   },
+
+  recordWin(id: string): void {
+    storage.set(
+      KEY,
+      players.getAll().map((p) => (p.id === id ? { ...p, wins: (p.wins ?? 0) + 1 } : p))
+    );
+  },
 };
